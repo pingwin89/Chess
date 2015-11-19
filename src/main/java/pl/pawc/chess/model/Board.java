@@ -1,5 +1,7 @@
 package pl.pawc.chess.model;
 
+import pl.pawc.chess.model.exception.WrongInputException;
+
 public class Board{
 
     private Figure[][] figures;
@@ -18,18 +20,31 @@ public class Board{
     }
 
     public Figure getFigure(Position position){
-        return getFigures[position.getX()][position.getY()];
+        return getFigures()[position.getX()][position.getY()];
+    }
+
+    public Figure getFigure(String input) throws WrongInputException{
+        return getFigure(new Position(input));
     }
 
     public void put(Position position, Figure figure){
-        getFigure(position) = figure;
+        figures[position.getX()][position.getY()] = figure;
+    }
+
+    public void put(String input, Figure figure) throws WrongInputException{
+       Position position = new Position(input);
+       put(position, figure);
     }
 
     public void move(Position position1, Position position2){
-        getFigure(position2) = getFigure(position1);
-        getFigure(position1) = null;
-        getFigure(position2).setX(position2.getX());
-        getFigure(position2).setY(position2.getY());
+        figures[position2.getX()][position2.getY()] = getFigure(position1);
+        figures[position1.getX()][position1.getY()] = null;
+        getFigure(position2).setPosition(position2);
+        getFigure(position2).setPosition(position2);
+    }
+
+    public void move(String input1, String input2) throws WrongInputException{
+        move(new Position(input1), new Position(input2));
     }
 
 }
